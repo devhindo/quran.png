@@ -1,26 +1,27 @@
-const form = document.querySelector("form");
-form.addEventListener("submit", (event) => {
-  async function download() {
+const form = document.querySelector('form');
+form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const soraNumber = form.elements["soraNumber"].value;
-    const ayahNumber = form.elements["ayahNumber"].value;
-    const highQuality = form.elements["highQuality"].checked;
-    console.log(soraNumber, ayahNumber, highQuality);
-    var url = `https://cdn.islamic.network/quran/images/${
-      highQuality ? "high-resolution/" : ""
-    }${soraNumber}_${ayahNumber}.png`;
+    const soraNumber = form.elements['soraNumber'].value;
+    const ayahNumber = form.elements['ayahNumber'].value;
+    const highQuality = form.elements['highQuality'].checked;
+    console.log(soraNumber, ayahNumber, highQuality)
+    var url = `https://cdn.islamic.network/quran/images/${highQuality ? 'high-resolution/' : ''}${soraNumber}_${ayahNumber}.png`;
     console.log(url);
     // download the image from url and save it to the user's device
-    const blob = await fetch(url).then((r) => r.blob());
-    const blobURL = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = blobURL;
-    link.download = `${soraNumber}_${ayahNumber}.png`;
-    link.addEventListener("click", () => {
-      setTimeout(() => URL.revokeObjectURL(blobURL), 7000);
-    });
-    link.click();
-    document.body.appendChild(link);
-  }
-    download();
+    downloadImage(url, `sora-${soraNumber}-ayah-${ayahNumber}.png`);
 });
+
+
+async function downloadImage(imageSrc, nameOfDownload = 'my-image.png') {
+    const response = await fetch(imageSrc);
+    const blobImage = await response.blob();
+    const href = URL.createObjectURL(blobImage);
+    const anchorElement = document.createElement('a');
+    anchorElement.href = href;
+    anchorElement.download = nameOfDownload;
+    document.body.appendChild(anchorElement);
+    anchorElement.click();
+    document.body.removeChild(anchorElement);
+    window.URL.revokeObjectURL(href);
+  }
+  
