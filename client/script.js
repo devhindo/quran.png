@@ -11,7 +11,7 @@ form.addEventListener("submit", (event) => {
   console.log(url);
   // download the image from url and save it to the user's device
   //downloadImage(url, `sora-${soraNumber}-ayah-${ayahNumber}.png`);
-  di(url);
+  d3("https://avatars.githubusercontent.com/u/66886118?v=4");
 });
 
 async function downloadImage(imageSrc, nameOfDownload = "my-image.png") {
@@ -37,3 +37,19 @@ async function di(url) {
     downloadLink.click();
 
 }
+
+
+function downloadImage2(url) {
+    fetch(url, {mode: 'no-cors'})
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'image.png';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+  }
+
